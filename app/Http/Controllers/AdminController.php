@@ -115,7 +115,7 @@ class AdminController extends Controller
         $search = $request->input('search');
     
         if ($search) {
-            $product = Product::where('name_product', 'LIKE', "%{$search}%")->paginate(10); 
+            $product = Product::where('name', 'LIKE', "%{$search}%")->paginate(10); 
             $product->appends(['search' => $search]);
         } else {
             $product = Product::paginate(10); 

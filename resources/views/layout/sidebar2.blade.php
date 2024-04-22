@@ -23,19 +23,14 @@
           </a>
         </li>
         <li class="treeview">
-          <a href="/admin.produk">
+          <a href="/employee.product">
             <i class="fa fa-files-o"></i>
             <span>Produk</span>
           </a>
         </li>
         <li>
-          <a href="/admin.penjualan">
+          <a href="/employee.transaction">
             <i class="fa fa-th"></i> <span>Penjualan</span>
-          </a>
-        </li>
-        <li class="treeview">
-          <a href="/admin.user">
-            <i class="fa fa-table"></i> <span>User</span>
           </a>
         </li>
       </ul>

@@ -1,38 +1,51 @@
 @extends('layout.main')
 
 @section('content')
-   <!-- form -->
-   <div class="box box-info">
-    <div class="box-header">
-      <i class="fa fa-envelope"></i>
+<div class="box box-info">
+  <div class="box-body">
+    <h4 class="card-title">Tambah Produk</h4>
+     <form action="{{ route('store-product') }}" method="post" enctype="multipart/form-data"> 
+      @csrf
+      <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-md-12">Nama Produk<span class="text-danger">*</span></label>
+                <div class="col-md-12">
+                    <input type="text" name="name" class="form-control">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-md-12">Gambar Produk<span class="text-danger">*</span></label>
+                <div class="col-md-12">
+                    <input type="file" name="image" class="form-control" accept="image/png, image/jpg, image/jpeg">
+                </div>
+            </div>
+        </div>
+     </div>
+     <div class="row">
+       <div class="col-md-6">
+          <div class="form-group">
+              <label class="col-md-12">Harga <span class="text-danger">*</span></label>
+              <div class="col-md-12">
+                  <input type="text" name="price" class="form-control">
+              </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+              <label class="col-md-12">Stok <span class="text-danger">*</span></label>
+              <div class="col-md-12">
+                  <input type="text" name="stock" class="form-control">
+              </div>
+          </div>
+        </div>
+     </div> 
+     <button type="submit" class="pull-right btn btn-warning" style="margin-top: 15px; margin-right: 15px">Send
+      <i class="fa fa-arrow-circle-right"></i></button>
+    </form>
+  </div>  
+</div>
 
-      <h3 class="box-title">Quick Email</h3>
-      <!-- tools box -->
-      {{-- <div class="pull-right box-tools">
-        <button type="button" class="btn btn-info btn-sm" data-widget="remove" data-toggle="tooltip"
-                title="Remove">
-          <i class="fa fa-times"></i></button>
-      </div> --}}
-      <!-- /. tools -->
-    </div>
-    <div class="box-body">
-      <form action="#" method="post">
-        <div class="form-group">
-          <input type="email" class="form-control" name="emailto" placeholder="Email to:">
-        </div>
-        <div class="form-group">
-          <input type="text" class="form-control" name="subject" placeholder="Subject">
-        </div>
-        <div>
-          {{-- <textarea class="textarea" placeholder="Message" --}}
-                    style="width: 100%; height: 125px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
-        </div>
-      </form>
-    </div>
-    <div class="box-footer clearfix">
-      <button type="button" class="pull-right btn btn-default" id="sendEmail">Send
-        <i class="fa fa-arrow-circle-right"></i></button>
-    </div>
-  </div>
-    
 @endsection

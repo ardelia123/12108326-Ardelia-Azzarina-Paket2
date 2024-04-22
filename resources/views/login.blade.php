@@ -22,7 +22,7 @@
 		<div class="row justify-content-center">
 			<div class="col-lg-5">
 				<div class="app-card app-card-settings card py-4 px-4 shadow rounded shadow-lg p-4 mt-3">
-					<form action="/auth" method="post">
+					<form action="{{ route('auth') }}" method="post">
 						@csrf
 						<div class="text-center mt-3">
 							
