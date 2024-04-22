@@ -31,7 +31,7 @@ class AdminController extends Controller
             $userName = Auth::user()->name;
             if (Auth::user()->role == 'admin'){
                 return redirect()->route('admin')->with('userName', $userName);
-            } elseif (Auth::user()->role == 'cashier') {
+            } elseif (Auth::user()->role == 'employee') {
                 return redirect()->route('employee')->with('userName', $userName);
             }
         } else {
@@ -109,24 +109,103 @@ class AdminController extends Controller
     {
         $user = User::where('id', $id)->firstOrFail();
         $user->delete();
-        return redirect()->back()->with('successDelete', 'delete succeed!');
+        return redirect()->back()->with('successDelete', 'Telah Dihapus');
     }
-    // public function product(Request $request) {
-    //     $search = $request->input('search');
+    public function product(Request $request) {
+        $search = $request->input('search');
     
-    //     if ($search) {
-    //         $product = Product::where('name_product', 'LIKE', "%{$search}%")->paginate(10); 
-    //         $product->appends(['search' => $search]);
-    //     } else {
-    //         $product = Product::paginate(10); 
-    //     }
+        if ($search) {
+            $product = Product::where('name_product', 'LIKE', "%{$search}%")->paginate(10); 
+            $product->appends(['search' => $search]);
+        } else {
+            $product = Product::paginate(10); 
+        }
         
-    //     return view('admin.product', compact('produk'));
-    // }
+        return view('admin.produk', compact('product'));
+    }
 
     public function create_product()
     {
         return view('admin.tambahproduk');
     }
 
+    public function store_product(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'price' => 'required',
+            'stock' => 'required',
+            'image' => 'required|mimes:jpg,jpeg,png'
+        ]);
+
+        
+        $image = $request->file('image');
+        $img = rand() . '.' . $image->extension();
+        $path = public_path('assets/product/');
+        $image->move($path, $img);
+        
+        $product = Product::create([
+            'name' => $request['name'],
+            'image' => $img,
+            'price' => $request['price'],
+            'stock' => $request['stock'],
+        ]);
+
+        return redirect ('/admin.produk')->with('success', 'Produk Ditambahkan');
+    } 
+
+    public function edit_product($id)
+    {
+        $product = Product::findOrFail($id);
+        return view('admin.editproduk', compact('product'));
+    }
+
+    public function update_product(Request $request, Product $product, $id)
+    {
+        try {
+            $product = Product::findOrFail($id);
+            $image = $request->file('image');
+            $img = rand() . '.' . $image->extension();
+            $path = public_path('assets/product/');
+            $image->move($path, $img);
+            $product->update([
+                'name' => $request->name,
+                'image' => $img,
+                'price' => $request->price,
+                'stock' => $request->stock,
+            ]);
+            return redirect('/admin.produk')->with('success', 'Produk diedit');
+        } catch (\Exception $error) {
+            return redirect()->back()->with('errorEdit', $error->getMessage());
+        }
+    }
+
+    public function update_stock(Request $request, $id)
+    {
+        try {
+            $product = Product::findOrFail($id);
+            $product->update([
+                'stock' => $request->stock,
+            ]);
+            return redirect('/admin.produk')->with('success', 'Stok Diedit');
+        } catch (\Exception $error) {
+            return redirect()->back()->with('errorEdit', $error->getMessage());
+        }
+    }
+
+    public function delete_product($id)
+    {
+        $product = Product::where('id', $id)->firstOrFail();
+        unlink('assets/product/' . $product['image']);
+        $product->delete();
+        Product::where('id', $id)->delete();
+        return redirect('/admin.produk')->with('success', 'Produk telah di hapus');
+    }
+
+    public function penjualan()
+    {
+        $sale = Sale::with(['customer', 'detail'])->paginate(5);
+
+        return view('admin.penjualan', compact('sale'));
+    }
 }
